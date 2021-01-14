@@ -5,9 +5,10 @@ class Node:
     def __init__(self, data):
         self.data = data
         self.next = None
+        self.prev = None
 
 
-class LinkedList:
+class DoublyList:
     def __init__(self):
         self.head = None
         self.size = 0
@@ -19,6 +20,7 @@ class LinkedList:
         node = Node(data)
         if self.is_head_null(node):
             return
+        self.head.prev = node
         node.next = self.head
         self.head = node
 
@@ -28,10 +30,14 @@ class LinkedList:
         node = Node(data)
         if self.is_head_null(node):
             return
+        node.prev = self.last
         self.last.next = node
         self.last = node
 
     def add_element_at_specific_location(self, data, location):
+        if location == 0:
+            # user have choose first location
+            return self.insert_at_first(data)
         if location > self.get_list_size():
             print("Out of size list given")
             return
@@ -44,6 +50,11 @@ class LinkedList:
             count += 1
             temp = temp.next
         node.next = temp.next
+        node.prev = temp
+        if temp.next is None:
+            # User have selected last position
+            return self.insert_at_last(data)
+        temp.next.prev = node
         temp.next = node
 
     def search_element(self, element):
@@ -53,10 +64,10 @@ class LinkedList:
         while temp is not None:
             if element == temp.data:
                 print(f"Element found in list at location {location}")
-                return
+                return True
             temp = temp.next
             location += 1
-        print("Element not found in list")
+        return False
 
     def is_head_null(self, node):
         """If head is none add first element to list"""
@@ -65,11 +76,11 @@ class LinkedList:
             self.last = node
             return True
 
-    def print_list(self):
+    def get_list(self):
         """Print List data"""
         temp = self.head
         while True:
-            print(temp.data)
+            yield temp.data
             if temp.next is None:
                 break
             temp = temp.next
@@ -77,19 +88,12 @@ class LinkedList:
     def get_list_size(self):
         return self.size
 
+    def get_reverse_list(self):
+        temp = self.last
+        while True:
+            yield temp.data
+            if temp.prev is None:
+                break
+            temp = temp.prev
 
-linked_list = LinkedList()
-
-# Insert at beginning
-linked_list.insert_at_first(300)
-linked_list.insert_at_first(15)
-linked_list.insert_at_last(100)
-# insert at last
-linked_list.insert_at_last(200)
-linked_list.insert_at_last(10)
-# insert at specific location
-linked_list.add_element_at_specific_location(200003, 5)
-# print list
-linked_list.print_list()
-# Search in Linked List
-linked_list.search_element(2002)
+# Please refere test cases

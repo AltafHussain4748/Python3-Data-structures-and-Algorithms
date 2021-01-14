@@ -23,11 +23,11 @@ class Queue:
 
 
 queue = Queue()
-queue.is_empty()
 queue.enqueue(10)
 queue.enqueue(11)
 queue.enqueue(12)
 queue.enqueue(13)
+queue.print_queue()
 queue.dequeue()
-queue.enqueue(1000)
+print("After removing")
 queue.print_queue()
